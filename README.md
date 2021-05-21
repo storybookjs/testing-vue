@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/1671563/119190095-2dfa7880-ba7d-11eb-848a-f629e121f729.png" alt="Storybook Testing Vue" width="100" />
+  <img src="https://user-images.githubusercontent.com/1671563/119191947-9ba7a400-ba7f-11eb-8658-2b7056f1cd12.png" alt="Storybook Testing Vue" width="100" />
 </p>
 
 <p align="center">Testing utilities that allow you to reuse your stories in your unit tests</p>
