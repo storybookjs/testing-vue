@@ -6,6 +6,8 @@
 
 <br/>
 
+> ⚠️ If you're using Storybook with **Vue 3**, please check [@storybook/testing-vue3](https://github.com/storybookjs/testing-vue3) instead!
+
 ## Installation
 
 This library should be installed as one of your project's `devDependencies`:
