@@ -70,9 +70,9 @@
     "vue": "^2.6.12"
   },
   "dependencies": {
-    "@storybook/addons": "^6.2.9",
-    "@storybook/client-api": "^6.2.9",
-    "@storybook/vue": "^6.2.9"
+    "@storybook/addons": "^6.3.7",
+    "@storybook/client-api": "^6.3.7",
+    "@storybook/vue": "^6.3.7"
   },
   "resolutions": {
     "**/typescript": "^4.2.3"
