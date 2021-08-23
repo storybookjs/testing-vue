@@ -84,12 +84,25 @@ export function composeStory<GenericArgs>(
     const cmp =
       typeof component === 'string' ? { template: component } : component
 
-    cmp.props = Object.keys(context.args)
+    const {args} = context
+    cmp.props = Object.keys(context.argTypes) 
+   
+    // augment args with action methods. 
+    // Either match the argTypesRegex parameter
+    // or an argType with "action" property
+    const matcher = globalStorybookConfig.parameters?.actions?.argTypesRegex
+    const matchRegExp = matcher ? new RegExp(matcher) : null
+
+    for (const prop of cmp.props) {
+      if ((matchRegExp?.test(prop) || context.argTypes[prop].action) && typeof args[prop] !== 'function') {
+        args[prop] = () => {}
+      }
+    }
 
     return Vue.extend({
       render(h) {
         return h(cmp, {
-          props: context.args,
+          props: args,
         })
       },
     })
@@ -114,25 +127,35 @@ export function composeStory<GenericArgs>(
     }
     return acc
   }, {} as Record<string, { defaultValue: any }>)
-  return ((extraArgs?: Record<string, any>) =>
-    // @ts-ignore
-    decorated({
+  return (extraArgs?: Record<string, any>) => {
+    const args = {
+      ...(meta?.args || {}),
+      ...story.args,
+      ...extraArgs,
+    }
+    // construct basic ArgTypes from args
+    const argTypes: ArgTypes = {};
+    for (const type of Object.keys(args)) {
+      argTypes[type] = {}
+    }
+    // merge with actual ArgTypes config 
+    Object.assign(argTypes, meta.argTypes, globalConfig.argTypes)
+
+    return decorated({
       id: '',
       kind: '',
       name: '',
-      argTypes: globalConfig.argTypes || {},
+      argTypes,
       globals: defaultGlobals,
       parameters: combineParameters(
         globalConfig.parameters || {},
         meta?.parameters || {},
         story.parameters || {}
       ),
-      args: {
-        ...(meta?.args || {}),
-        ...story.args,
-        ...extraArgs,
-      },
-    }) as ComponentOptions<any>)
+      args,
+    }) as ComponentOptions<any>
+  }
+    
 }
 
 export function composeStories<
