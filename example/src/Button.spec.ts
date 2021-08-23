@@ -1,5 +1,5 @@
 import { mount } from '@cypress/vue';
-import { composeStories } from '@storybook/testing-vue';
+import { composeStories } from '../../dist';
 
 import * as stories from './Button.stories';
 
