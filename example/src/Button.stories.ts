@@ -11,6 +11,7 @@ export default {
     </div>`,
   ],
   argTypes: {
+    onClick: { action: 'onClick' },
     backgroundColor: { control: 'color' },
     size: {
       control: { type: 'select', options: ['small', 'medium', 'large'] },
