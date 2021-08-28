@@ -139,7 +139,7 @@ export function composeStory<GenericArgs>(
       argTypes[type] = {}
     }
     // merge with actual ArgTypes config 
-    Object.assign(argTypes, meta.argTypes, globalConfig.argTypes)
+    Object.assign(argTypes, story.argTypes, meta.argTypes, globalConfig.argTypes)
 
     return decorated({
       id: '',
