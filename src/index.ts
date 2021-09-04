@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { combineParameters } from '@storybook/client-api'
-import { ArgTypes, Parameters, BaseDecorators } from '@storybook/addons'
-import { Story, Meta, StoryContext } from '@storybook/vue'
+import addons, { mockChannel, ArgTypes, Parameters, BaseDecorators } from '@storybook/addons'
+import { Meta, Story, StoryContext } from '@storybook/vue'
 import decorateStory from './decorateStory'
 import type { ComponentOptions, VueConstructor } from 'vue'
 
@@ -32,6 +32,9 @@ export type StoriesWithPartialProps<T> = {
     ? Story<Partial<P>>
     : unknown
 }
+
+// Some addons use the channel api to communicate between manager/preview, and this is a client only feature, therefore we must mock it.
+addons.setChannel(mockChannel());
 
 let globalStorybookConfig: GlobalConfig = {}
 
