@@ -1,3 +1,15 @@
+# v0.0.2 (Tue Sep 28 2021)
+
+#### 🐛 Bug Fix
+
+- Fix: support addons that use channel api [#4](https://github.com/storybookjs/testing-vue/pull/4) ([@mphstudios](https://github.com/mphstudios))
+
+#### Authors: 1
+
+- matthew p hrudka ([@mphstudios](https://github.com/mphstudios))
+
+---
+
 # v0.0.1 (Sat May 22 2021)
 
 #### ⚠️ Pushed to `main`
