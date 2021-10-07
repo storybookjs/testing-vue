@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { combineParameters } from '@storybook/client-api'
 import addons, { mockChannel, ArgTypes, Parameters, BaseDecorators } from '@storybook/addons'
-import { Meta, Story, StoryContext, Args } from '@storybook/vue'
+import { Meta, Story, StoryContext } from '@storybook/vue'
 import decorateStory from './decorateStory'
 import type { ComponentOptions, VueConstructor } from 'vue'
 
