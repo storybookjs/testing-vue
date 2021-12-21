@@ -1,3 +1,21 @@
+# v0.0.3 (Tue Dec 21 2021)
+
+#### 🐛 Bug Fix
+
+- Fix TypeScript Types and argTypes generation [#3](https://github.com/storybookjs/testing-vue/pull/3) ([@dwightjack](https://github.com/dwightjack))
+
+#### ⚠️ Pushed to `main`
+
+- chore: lock storybook to 6.3 in example repo ([@yannbf](https://github.com/yannbf))
+- chore: lock storybook dev dependency to 6.3 ([@yannbf](https://github.com/yannbf))
+
+#### Authors: 2
+
+- Marco Solazzi ([@dwightjack](https://github.com/dwightjack))
+- Yann Braga ([@yannbf](https://github.com/yannbf))
+
+---
+
 # v0.0.2 (Tue Sep 28 2021)
 
 #### 🐛 Bug Fix
