@@ -1,7 +1,8 @@
-import MyButton from "./Button.vue";
+import MyButton from './Button.vue';
+import { Story } from '@storybook/vue';
 
 export default {
-  title: "Example/Button",
+  title: 'Example/Button',
   component: MyButton,
   decorators: [
     () => `<div style='border:4px solid red;padding:10px;'>
@@ -10,44 +11,45 @@ export default {
     </div>`,
   ],
   argTypes: {
-    backgroundColor: { control: "color" },
+    onClick: { action: 'onClick' },
+    backgroundColor: { control: 'color' },
     size: {
-      control: { type: "select", options: ["small", "medium", "large"] },
+      control: { type: 'select', options: ['small', 'medium', 'large'] },
     },
   },
 };
 
-const Template = (args, { argTypes }) => ({
+const Template: Story = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   components: { MyButton },
   template: '<my-button @onClick="onClick" v-bind="$props" />',
 });
 
-export const Primary = Template.bind({});
+export const Primary: Story = Template.bind({});
 Primary.args = {
   primary: true,
-  label: "Primary Button",
+  label: 'Primary Button',
 };
 Primary.decorators = [
   () => `<div style='border:4px solid blue;padding:10px;'>
     Story Decorator <br/>
     <story/>
   </div>`,
-]
+];
 
-export const Secondary = Template.bind({});
+export const Secondary: Story = Template.bind({});
 Secondary.args = {
-  label: "Secondary Button",
+  label: 'Secondary Button',
 };
 
-export const Large = Template.bind({});
+export const Large: Story = Template.bind({});
 Large.args = {
-  size: "large",
-  label: "Button",
+  size: 'large',
+  label: 'Button',
 };
 
 export const Small = Template.bind({});
 Small.args = {
-  size: "small",
-  label: "Button",
+  size: 'small',
+  label: 'Button',
 };

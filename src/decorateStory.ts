@@ -4,8 +4,10 @@ import { StoryFn, DecoratorFunction, StoryContext } from '@storybook/addons';
 export const WRAPS = 'STORYBOOK_WRAPS';
 export const VALUES = 'STORYBOOK_VALUES';
 
-export type VueStory = ComponentOptions<any> & { options: Record<string, any> };
-type StoryFnVueReturnType = string | ComponentOptions<any>;
+export type VueStory =
+  | (ComponentOptions<any> & { options: Record<string, any> })
+  | VueConstructor;
+type StoryFnVueReturnType = string | ComponentOptions<any> | VueConstructor;
 
 function getType(fn: Function) {
   const match = fn && fn.toString().match(/^\s*function (\w+)/);
@@ -61,7 +63,9 @@ function prepare(rawStory: StoryFnVueReturnType, innerStory?: VueStory) {
     [WRAPS]: story,
     // @ts-ignore // https://github.com/storybookjs/storybook/pull/7578#discussion_r307984824
     [VALUES]: {
-      ...(innerStory ? innerStory.options[VALUES] : {}),
+      ...(innerStory && 'options' in innerStory
+        ? innerStory.options[VALUES]
+        : {}),
       ...extractProps(storyVue),
     },
     functional: true,
@@ -95,9 +99,7 @@ function decorateStory(
 ) {
   return decorators.reduce(
     // @ts-ignore
-    (decorated: StoryFn<StoryFnVueReturnType>, decorator) => (
-      context: StoryContext = defaultContext
-    ) => {
+    (decorated, decorator) => (context: StoryContext = defaultContext) => {
       let story: VueStory;
 
       const decoratedStory = decorator(

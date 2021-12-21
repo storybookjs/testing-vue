@@ -6,6 +6,11 @@ import decorateStory from './decorateStory'
 import type { ComponentOptions, VueConstructor } from 'vue'
 
 type StoryFnVueReturnType = string | ComponentOptions<any>
+
+interface StoryFactory<Args = Record<string, any>> extends Story<Args> {
+  (extraArgs?: Args): ComponentOptions<any>;
+}
+
 /**
  * Object representing the preview.ts module
  *
@@ -29,7 +34,7 @@ export type StoriesWithPartialProps<T> = {
   [K in keyof T as T[K] extends Story<any> ? K : never]: T[K] extends Story<
     infer P
   >
-    ? Story<Partial<P>>
+    ? StoryFactory<Partial<P>>
     : unknown
 }
 
@@ -42,12 +47,16 @@ export function setGlobalConfig(config: GlobalConfig) {
   globalStorybookConfig = config
 }
 
+function isStory(story: any): story is Story {
+  return typeof story === 'function'
+}
+
 export function composeStory<GenericArgs>(
   story: Story<GenericArgs>,
   meta: Meta,
   globalConfig: GlobalConfig = globalStorybookConfig
-): Story<Partial<GenericArgs>> {
-  if (typeof story !== 'function') {
+): StoryFactory<GenericArgs> {
+  if (!isStory( story)) {
     throw new Error(
       `Cannot compose story due to invalid format. @storybook/testing-vue expected a function but received ${typeof story} instead.`
     )
@@ -75,12 +84,25 @@ export function composeStory<GenericArgs>(
     const cmp =
       typeof component === 'string' ? { template: component } : component
 
-    cmp.props = Object.keys(context.args)
+    const {args} = context
+    cmp.props = Object.keys(context.argTypes) 
+   
+    // augment args with action methods. 
+    // Either match the argTypesRegex parameter
+    // or an argType with "action" property
+    const matcher = globalStorybookConfig.parameters?.actions?.argTypesRegex
+    const matchRegExp = matcher ? new RegExp(matcher) : null
+
+    for (const prop of cmp.props) {
+      if ((matchRegExp?.test(prop) || context.argTypes[prop].action) && typeof args[prop] !== 'function') {
+        args[prop] = () => {}
+      }
+    }
 
     return Vue.extend({
       render(h) {
         return h(cmp, {
-          props: context.args,
+          props: args,
         })
       },
     })
@@ -105,25 +127,35 @@ export function composeStory<GenericArgs>(
     }
     return acc
   }, {} as Record<string, { defaultValue: any }>)
-  return ((extraArgs: Record<string, any>) =>
-    // @ts-ignore
-    decorated({
+  return (extraArgs?: Record<string, any>) => {
+    const args = {
+      ...(meta?.args || {}),
+      ...story.args,
+      ...extraArgs,
+    }
+    // construct basic ArgTypes from args
+    const argTypes: ArgTypes = {};
+    for (const type of Object.keys(args)) {
+      argTypes[type] = {}
+    }
+    // merge with actual ArgTypes config 
+    Object.assign(argTypes, story.argTypes, meta.argTypes, globalConfig.argTypes)
+
+    return decorated({
       id: '',
       kind: '',
       name: '',
-      argTypes: globalConfig.argTypes || {},
+      argTypes,
       globals: defaultGlobals,
       parameters: combineParameters(
         globalConfig.parameters || {},
         meta?.parameters || {},
         story.parameters || {}
       ),
-      args: {
-        ...(meta?.args || {}),
-        ...story.args,
-        ...extraArgs,
-      },
-    })) as Story<Partial<GenericArgs>>
+      args,
+    }) as ComponentOptions<any>
+  }
+    
 }
 
 export function composeStories<
@@ -132,11 +164,11 @@ export function composeStories<
   const { default: meta, __esModule, ...stories } = storiesImport
   // Compose an object containing all processed stories passed as parameters
   const composedStories = Object.entries(stories).reduce(
-    (storiesMap, [key, story]) => {
-      storiesMap[key] = composeStory(story as Story, meta, globalConfig)
+    (storiesMap, [key, story]: [string, Story]) => {
+      storiesMap[key] = composeStory(story, meta, globalConfig)
       return storiesMap
     },
-    {} as { [key: string]: Story }
+    {} as { [key: string]:  StoryFactory }
   )
   return composedStories as StoriesWithPartialProps<T>
 }

@@ -1,7 +1,7 @@
 import { mount } from '@cypress/vue';
-import { composeStories } from '@storybook/testing-vue';
+import { composeStories } from '../../dist';
 
-import * as stories from './Button.stories.js';
+import * as stories from './Button.stories';
 
 const { Primary, Secondary } = composeStories(stories);
 
