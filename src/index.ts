@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { combineParameters } from '@storybook/client-api'
-import addons, { mockChannel, ArgTypes, Parameters, BaseDecorators } from '@storybook/addons'
+import { addons, mockChannel, ArgTypes, Parameters, BaseDecorators } from '@storybook/addons'
 import { Meta, Story, StoryContext } from '@storybook/vue'
 import decorateStory from './decorateStory'
 import type { ComponentOptions, VueConstructor } from 'vue'
@@ -85,9 +85,9 @@ export function composeStory<GenericArgs>(
       typeof component === 'string' ? { template: component } : component
 
     const {args} = context
-    cmp.props = Object.keys(context.argTypes) 
-   
-    // augment args with action methods. 
+    cmp.props = Object.keys(context.argTypes)
+
+    // augment args with action methods.
     // Either match the argTypesRegex parameter
     // or an argType with "action" property
     const matcher = globalStorybookConfig.parameters?.actions?.argTypesRegex
@@ -138,7 +138,7 @@ export function composeStory<GenericArgs>(
     for (const type of Object.keys(args)) {
       argTypes[type] = {}
     }
-    // merge with actual ArgTypes config 
+    // merge with actual ArgTypes config
     Object.assign(argTypes, story.argTypes, meta.argTypes, globalConfig.argTypes)
 
     return decorated({
@@ -155,7 +155,7 @@ export function composeStory<GenericArgs>(
       args,
     }) as ComponentOptions<any>
   }
-    
+
 }
 
 export function composeStories<
