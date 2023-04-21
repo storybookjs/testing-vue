@@ -26,6 +26,15 @@ yarn add --dev @storybook/testing-vue
 
 ## Setup
 
+### Jest configuration
+
+If you're using Jest to run your tests you should map `.vue` files to use a version of Vue that includes its template compiler in your `jest.config.js`:
+```js
+moduleNameMapper: {
+  '^vue$': 'vue/dist/vue.common.dev.js'
+},
+```
+
 ### Storybook CSF
 
 This library requires you to be using Storybook's [Component Story Format (CSF)](https://storybook.js.org/docs/react/api/csf) and [hoisted CSF annotations](https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#hoisted-csf-annotations), which is the recommended way to write stories since Storybook 6.
