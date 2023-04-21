@@ -1,3 +1,20 @@
+# v0.0.4 (Fri Apr 21 2023)
+
+#### 🐛 Bug Fix
+
+- fix: replace addons default export with named export [#9](https://github.com/storybookjs/testing-vue/pull/9) ([@Hanawa02](https://github.com/Hanawa02))
+
+#### 📝 Documentation
+
+- Add instructions for Jest users to map .vue files to a version of vue including the template-compiler [#8](https://github.com/storybookjs/testing-vue/pull/8) ([@raphael-yapla](https://github.com/raphael-yapla))
+
+#### Authors: 2
+
+- [@raphael-yapla](https://github.com/raphael-yapla)
+- Laura Caroline ([@Hanawa02](https://github.com/Hanawa02))
+
+---
+
 # v0.0.3 (Tue Dec 21 2021)
 
 #### 🐛 Bug Fix
